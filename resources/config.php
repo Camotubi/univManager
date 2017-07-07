@@ -1,6 +1,10 @@
 <?php
  
 //CHANGE DB1 credentials LATERT 
+/* This file will be  used to load common credentials easily. ex. dbname pass etc.
+ *Also defines paths that will be used a lot later
+ *
+ */
 $config = array(
     "db" => array(
         "db1" => array(
