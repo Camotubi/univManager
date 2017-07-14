@@ -9,10 +9,10 @@
 		//constructor
 		function __construct($cod_plan,$fecha_aprob,$nombre,$descripccion)
 		{
-			$this->cod_plan;
-			$this->fecha_aprob;
-			$this->nombre;
-			$this->descripccion;
+			$this->cod_plan=$cod_plan;
+			$this->fecha_aprob=$fecha_aprob;
+			$this->nombre=$nombre;
+			$this->descripccion=$descripccion;
 		}
 
 
