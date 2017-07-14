@@ -6,6 +6,16 @@
 		private $nombre;
 		private	$descripccion;
 		
+		//constructor
+		function __construct($cod_plan,$fecha_aprob,$nombre,$descripccion)
+		{
+			$this->cod_plan;
+			$this->fecha_aprob;
+			$this->nombre;
+			$this->descripccion;
+		}
+
+
 		//cod_plan related
 		function setCod_plan($newCod_plan)
 		{
@@ -27,6 +37,25 @@
 			return $this->fecha_aprob;
 		}
 
+		//nombre related
+
+		function setNombre($newNombre)
+		{
+			$this->nombre = $newNombre;
+		}	
+		function getNombre()
+		{
+			return $this->nombre;
+		}
+		//descripccion related
+		function setDescripccion($newDescripccion)
+		{
+			$this->descripccion = $newDescripccion;
+		}	
+		function getDescripccion()
+		{
+			return $this->descripccion;
+		}
 	}
 
 
