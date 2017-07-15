@@ -22,7 +22,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         
                         <li>
-                            <a class="log_out" href="#">
+                            <a class="log_out" href="#">  
                                 <p>Cerrar Sesión</p>
                             </a>
                         </li>

@@ -32,8 +32,8 @@
        <i class="fa fa-lock"></i>
      </div>
       <span class="alert">Error en los datos colocados.</span>
-      <!-- button -->
-     <button type="button" class="log-btn" name="button" >Acceder</button>
+      <!-- button -->                                       <!-- Borrar el tag <a> -->
+     <button type="button" class="log-btn" name="button" ><a href="Oferta.php">Acceder</a></button>
   </div>
 </div>
 <script class="cssdeck" src="assets/js/jquery.min.js"></script>
