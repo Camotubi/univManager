@@ -1,0 +1,7 @@
+<?php
+	Estudiante extends Persona
+	{
+
+	}
+
+?>
