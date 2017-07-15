@@ -1,5 +1,5 @@
 <?php
-	class Profesor{
+	class Profesor extends Persona {
 	
 	}
 
