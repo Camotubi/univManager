@@ -1,6 +1,9 @@
+<!DOCTYPE html>
+<html>
+<body>
 <div class="wrapper">
     <?php 
-  require 'header.php';
+  require 'Header.php';
 ?>
 <div class="main-panel">
         <nav class="navbar navbar-default navbar-fixed" >
@@ -115,3 +118,5 @@
 
     </div>
 </div>
+</body>
+</html>
