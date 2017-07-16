@@ -7,10 +7,10 @@
  */
 $config = array(
     "db" => array(
-        "db1" => array(
-            "dbname" => "database1",
-            "username" => "dbUser",
-            "password" => "pa$$",
+        "univManager" => array(
+            "dbname" => "univManager",
+            "username" => "univ",
+            "password" => "Contra1234",
             "host" => "localhost"
         ),
         "db2" => array(
@@ -24,7 +24,7 @@ $config = array(
         "baseUrl" => "http://example.com"
     ),
     "paths" => array(
-        "resources" => "/path/to/resources",
+        "resources" => realpath(dirname(__FILE__)),
         "images" => array(
             "content" => $_SERVER["DOCUMENT_ROOT"] . "/images/content",
             "layout" => $_SERVER["DOCUMENT_ROOT"] . "/images/layout"
