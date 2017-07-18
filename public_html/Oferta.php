@@ -1,6 +1,9 @@
 <div class="wrapper">
     <?php 
-  require 'header.php';
+
+require '../resources/config.php';
+require TEMPLATES_PATH.'/header.php';
+echo TEMPLATES_PATH.'/header.php';
 ?>
 
     <div class="main-panel">

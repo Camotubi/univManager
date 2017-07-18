@@ -1,12 +1,16 @@
 <?php
+class Persona
+{
+
+
 	private $nombre;
 	private $apellido;
 	private $telefono;
 	private $cedula;
 	private $direccion;
 	private $correo;
-
-	function __construct($nombre,$apellido$telefono,$cedula,$direccion,$correo)
+	private $sexo;
+	function __construct($nombre,$apellido,$telefono,$cedula,$direccion,$correo,$sexo)
 	{
 		$this->nombre=$nombre;
 		$this->apellido=$apellido;
@@ -14,6 +18,7 @@
 		$this->cedula=$cedula;
 		$this->direccion=$direccion;
 		$this->correo=$correo;
+		$this->sexo=$sexo;
 	}
 
 	function setNombre($nombre)
@@ -60,4 +65,13 @@
 	{
 		return($this->correo);
 	}
+	function getSexo()
+	{
+		return($this->sexo);
+	}
+	function setSexo($sexo)
+	{
+		$this->sexo = $sexo;
+	}
+}
 ?>
