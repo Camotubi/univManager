@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require "../resources/config.php";
-require "../resources/security.php";
-require "../resources/Persona.php";
+require RESOURCES_PATH.'/security.php';
+require RESOURCES_PATH.'/Persona.php';
 if(isset($_POST["tipoRegistro"])){$tipoRegistro = $_POST["tipoRegistro"];}
 ?>
 <!DOCTYPE html>
@@ -65,7 +65,7 @@ echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="N
 							for($i= 0; $i<$cantRegistros;$i++)
 							{
 								echo '
-								<tr>
+								<tr'. if(in_array($i,$personaExistente){})>
 									<td>
 										<input type=text name="nombre'.$i.'" required>	
 									</td>
@@ -139,19 +139,9 @@ echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="N
 									$row=$stmt->fetch(PDO::FETCH_ASSOC);
 									if($row->roWCount()<=0)
 									{
-
+										array_push($personaExistente,$i);
 									}
 								}
-							}
-							if($user['username']==$username && $user['contra']=$contra)
-							{
-								session_start();
-								$_SESSION["username"]=$username;
-								header("Location: Oferta.php" );
-							}
-							else
-							{
-								$errMessage= 'Usuario/contraseña incorrecta';
 							}
 						}catch(PDOException $e)
 						{

@@ -1,11 +1,11 @@
-<div class="wrapper">
     <?php 
 
 require '../resources/config.php';
 require TEMPLATES_PATH.'/header.php';
-echo TEMPLATES_PATH.'/header.php';
+require RESOURCES_PATH.'/security.php';
 ?>
 
+<div class="wrapper">
     <div class="main-panel">
         <nav class="navbar navbar-default navbar-fixed" >
             <div class="container-fluid">

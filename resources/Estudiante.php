@@ -1,5 +1,6 @@
 <?php
-	Estudiante extends Persona
+include 'Persona.php';
+	class Estudiante extends Persona
 	{
 
 	}
