@@ -1,4 +1,3 @@
-
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -7,34 +6,21 @@ require RESOURCES_PATH.'/Asignatura.php';
 require RESOURCES_PATH.'/Programa.php';
 require RESOURCES_PATH.'/security.php';
 
-$db=$config["db"]["univManager"];
-            $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-            $stmt=$con->prepare('SELECT * FROM Asignatura');
-            $stmt->execute();
-        $asignaturasDisponibles=array();
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-        {
-            if(isset($asignaturasDisponibles))
-                {
-                    array_push($asignaturasDisponibles, new Asignatura($row['cod_asig'],$row['nombre'],$row['creditos'],$row['duracion_bruta']));
+if(isset($_POST["asigToModify"]))
+{
+    $asignaturaSeleccionada=$_SESSION["asignaturasDisponibles"][intval($_POST["asigToModify"])];
+ }  
+else
+{
+    header("Location: Asignaturas.php");
+}
 
-                    $_SESSION["asignaturasDisponibles"]=$asignaturasDisponibles;
-                }
-                else
-                {
-                    $asignaturasDisponibles = array(new Asignatura($row['cod_asig'],$row['nombre'],$row['creditos'],$row['duracion_bruta']));
-                    $_SESSION["asignaturasDisponibles"]=$asignaturasDisponibles;
-                }
-        }
                 
             
 
-function tablaAsignaturas($asignaturasArr) 
+function infoAsignatura($asignatura) 
 {
-    $tabla='<table class="table table-hover table-striped"><thead><th>Codigo-Asignatura</th><th>Nombre</th><th>Creditos</th><th>Duracion Bruta</th><th>Accion</th></thead><tbody>';
-    $x=0;
-    foreach($asignaturasArr as &$asignatura)
-    {
+    $tabla='<table class="table table-hover table-striped"><thead><th>Codigo-Asignatura</th><th>Nombre</th><th>Creditos</th><th>Duracion Bruta</th></thead><tbody>';
         $tabla.='<tr>
             <td>
                 '.$asignatura->getCod_asig().'
@@ -51,17 +37,9 @@ function tablaAsignaturas($asignaturasArr)
                 '.$asignatura->getDuracion_bruta().'
                 
             </td>
-            
-            <td>
-                <form method="post" action="modificarAsignatura.php">
-                    <input type="hidden" name="asigToModify" value="'.$x.'">
-                    <input type="hidden" name="action" value="modifyAsig">
-                    <input class="btn btn-info btn-fill" type ="submit" value="Modificar Asignatura">
-                </form>
-            </td>
+    
             </tr>';
-        $x=$x+1;
-    }
+    
     $tabla.='</tbody><table>';
     return($tabla);
 }
@@ -96,14 +74,14 @@ function tablaAsignaturas($asignaturasArr)
             <div class="row">
                     <div class="col-md-12">
                             
-                            
+
                                 <table >
-                                    <?php echo tablaAsignaturas($asignaturasDisponibles); ?>
+                                    <?php echo infoAsignatura($asignaturaSeleccionada); ?>
                                 </table>
 
                             </div>
                     </div>
-
+  
 
                 </div>
             </div>
