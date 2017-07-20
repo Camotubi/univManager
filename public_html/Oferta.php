@@ -26,7 +26,7 @@ require RESOURCES_PATH.'/security.php';
             <div class="container-fluid">
                 <div class="row">
                     
-                    <a href="#"> 
+                    <a href="generarOferta.php"> 
                     <div class="col-md-6">
                         <div class="card" style="background-image: url(assets/img/generarOA.jpg); background-position: center; ">
                             <div class="header">

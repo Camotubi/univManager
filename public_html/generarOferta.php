@@ -13,7 +13,7 @@ if(isset($_SESSION["selectedStudents"]))
 {
 	$selectedStudents=$_SESSION["selectedStudents"];
 }
-
+$selectedStudents=array();
 if(isset($_POST["action"]))
 {
 	$action=$_POST["action"];
@@ -162,12 +162,9 @@ function generateAvailableProgramsComboBox()
 </head>
 <body>
 
-if(isset($selectedStudents))
-{
-	echo generarTabla($selectedStudents);
-}
-				
-?>
+<?php echo showSearchStudentForm(); ?>
+<?php echo generarTabla($selectedStudents);?>
+
 </body>
 </html>
 
