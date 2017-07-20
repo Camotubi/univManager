@@ -11,6 +11,7 @@ require RESOURCES_PATH.'/security.php';
 <html>
 <?php require TEMPLATES_PATH.'/head.php';?>
 <body>
+<div class="wrapper">
 <?php
     require TEMPLATES_PATH.'/sidebar.php';
 ?>
@@ -68,9 +69,10 @@ require RESOURCES_PATH.'/security.php';
 
             </div>
         </div>
+        <?php require TEMPLATES_PATH.'/footer.php'; ?>  
+</div>
 
 
-<?php require TEMPLATES_PATH.'/footer.php'; ?>  
 
     </div>
     </body>
