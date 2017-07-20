@@ -55,7 +55,7 @@ function tablaAsignaturas($asignaturasArr)
             <td>
                 <form method="post" action="modificarAsignatura.php">
                     <input type="hidden" name="asigToModify" value="'.$x.'">
-                    <input type="hidden" name="action" value="modifyAsig">
+                    <input type="hidden" name="accion" value="Modificar Asignatura">
                     <input class="btn btn-info btn-fill" type ="submit" value="Modificar Asignatura">
                 </form>
             </td>
@@ -86,10 +86,9 @@ function tablaAsignaturas($asignaturasArr)
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-          <a href="Asignaturas/Agregar.php" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Agregar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Modificar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Eliminar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Buscar</a>
+                <a href="Oferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Atras</a>
+          <a href="agregarAsignatura.php" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Agregar</a>
+         
                 </div>
                 <br> 
             <!-- Lo siguiente solo es una prueba de como deberia quedar despues de agregar -->

@@ -7,7 +7,7 @@
 		private	$descripccion;
 		
 		//constructor
-		function __construct($cod_plan,$fecha_aprob,$nombre,$descripccion)
+		function __construct($cod_plan,$nombre,$fecha_aprob,$descripccion)
 		{
 			$this->cod_plan=$cod_plan;
 			$this->fecha_aprob=$fecha_aprob;
