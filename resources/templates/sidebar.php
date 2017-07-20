@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="menuPrograma.php">
+                    <a href="menuProgramas.php">
                         <i class="pe-7s-note2"></i>
                         <p>Programas</p>
                     </a>

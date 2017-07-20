@@ -26,7 +26,21 @@ $db=$config["db"]["univManager"];
                 }
         }
                 
-            
+      if(isset($_POST["accion"])) 
+      {
+      	
+      	$accion = $_POST["accion"];
+      	$progToModify=$_POST["progToModify"];
+      	switch($accion)
+      	{
+      		case "ModificarPrograma":
+      			$message='paseporisdfsdfq';
+      			$_SESSION["selectedPrograma"]=$programasDisponibles[intval($progToModify)];
+
+      			header("Location: modificarPrograma.php");
+      		break;
+      	}
+      }     
 
 function tablaProgramas($programasArr) 
 {
@@ -52,9 +66,9 @@ function tablaProgramas($programasArr)
             </td>
             
             <td>
-                <form method="post" action="modificarPrograma.php">
+                <form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
                     <input type="hidden" name="progToModify" value="'.$x.'">
-                    <input type="hidden" name="accion" value="Modificar Programa">
+                    <input type="hidden" name="accion" value="ModificarPrograma">
                     <input class="btn btn-info btn-fill" type ="submit" value="Modificar Programa">
                 </form>
             </td>
@@ -93,9 +107,10 @@ function tablaProgramas($programasArr)
                     <div class="col-md-12">
                             
                             
-                                <table >
-                                    <?php echo tablaProgramas($programasDisponibles); ?>
-                                </table>
+                                
+                                    <?php echo tablaProgramas($programasDisponibles); 
+                                    ?>
+                                
 
                             </div>
                     </div>

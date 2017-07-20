@@ -27,14 +27,14 @@ if(isset($_POST["tipoRegistro"])){$tipoRegistro = $_POST["tipoRegistro"];}
 		{
 			
 				echo'<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">';
-echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="Nombre del Propietario" title="Nombre"><br><br>
+echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="Nombre" title="Nombre"><br><br>
        Apellido:
-      <input type="text" name="apellido" required autofocus placeholder="Apellido del Propietario" title="Apellido"><br><br>
+      <input type="text" name="apellido" required autofocus placeholder="Apellido" title="Apellido"><br><br>
       Cedula:
-<input type="text" name="cedula" required autofocus placeholder="Cedula del Propietario" title="Introduzca su nombre aqui"><br><br>
-<input type="text" name="email" required autofocus placeholder="Cedula del Propietario" title="Introduzca su nombre aqui"><br><br>
-<input type="text" name="telefono" required autofocus placeholder="Cedula del Propietario" title="Introduzca su nombre aqui"><br><br>
-<input type="text" name="direccion" required autofocus placeholder="Cedula del Propietario" title="Introduzca su nombre aqui"><br><br>
+<input type="text" name="cedula" required autofocus placeholder="Cedula" title="Introduzca su nombre aqui"><br><br>
+<input type="text" name="email" required autofocus placeholder="Cedula" title="Introduzca su nombre aqui"><br><br>
+<input type="text" name="telefono" required autofocus placeholder="Cedula" title="Introduzca su nombre aqui"><br><br>
+<input type="text" name="direccion" required autofocus placeholder="Cedula" title="Introduzca su nombre aqui"><br><br>
 <select name="sexo">
 <option value="M">Masculino</option>
 <option value="F">Femenino</option>
@@ -65,7 +65,7 @@ echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="N
 							for($i= 0; $i<$cantRegistros;$i++)
 							{
 								echo '
-								<tr'. if(in_array($i,$personaExistente){})>
+								<tr>
 									<td>
 										<input type=text name="nombre'.$i.'" required>	
 									</td>

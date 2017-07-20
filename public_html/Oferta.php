@@ -1,41 +1,25 @@
     <?php 
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../resources/config.php';
-require TEMPLATES_PATH.'/header.php';
+require RESOURCES_PATH.'/Estudiante.php';
+require RESOURCES_PATH.'/Programa.php';
 require RESOURCES_PATH.'/security.php';
 ?>
 
-<div class="wrapper">
-    <div class="main-panel">
-        <nav class="navbar navbar-default navbar-fixed" >
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                                   
-                    <a class="navbar-brand">Oferta Académica</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    
+<!doctype html>
+<html>
+<?php require TEMPLATES_PATH.'/head.php';?>
+<body>
+<?php
+    require TEMPLATES_PATH.'/sidebar.php';
+?>
+<div class="main-panel">
 
-                    <ul class="nav navbar-nav navbar-right">
-                        
-                        <li>
-                            <a class="log_out" href="login.php">   <!-- Borrar la dirección de href-->
-                                <p>Cerrar Sesión</p>
-                            </a>
-                        </li>
-						<li class="separator hidden-lg hidden-md"></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+<?php
+    $navbarBrand = "Menu Principal";
+    require TEMPLATES_PATH.'/navbar.php';
+?>
 
         <div class="content">
             <div class="container-fluid">
@@ -86,9 +70,9 @@ require RESOURCES_PATH.'/security.php';
         </div>
 
 
-       <?php 
-  require 'footer.php';
-?>
+<?php require TEMPLATES_PATH.'/footer.php'; ?>  
 
     </div>
-</div>
+    </body>
+    </html>
+
