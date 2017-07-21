@@ -58,7 +58,7 @@ require RESOURCES_PATH.'/security.php';
                     
                     <a href="horarioGrupo.php"> 
                     <div class="col-md-6">
-                        <div class="card" style="background-image: url(assets/img/generarHM.jpg); background-position: center; ">
+                        <div class="card" style="background-image: url(assets/img/horarioPorGrupo.jpg); background-position: center; ">
                             
                         </div>
                     </div>
