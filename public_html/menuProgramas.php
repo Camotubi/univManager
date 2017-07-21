@@ -83,6 +83,7 @@ function tablaProgramas($programasArr)
 <html>
 <?php require TEMPLATES_PATH.'/head.php';?>
 <body>
+<div class="wrapper">
 <?php
 	require TEMPLATES_PATH.'/sidebar.php';
 ?>
@@ -120,6 +121,8 @@ function tablaProgramas($programasArr)
             </div>
         </div>
 
+	
+	</div>
 	<?php require TEMPLATES_PATH.'/footer.php'; ?>	
 </body>
 </html>

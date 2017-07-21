@@ -1,40 +1,30 @@
 <?php
-	class Clase
+	class Grupo
 	{
-		private $periodo;
-		private $dia;
-		private $salon;
+		private $cod_grupo;
+		private $cod_plan;
 
-		function __construct($perido,$dia,$salon)
+		function __construct($cod_grupo,$cod_plan)
 		{
-			$this->periodo = $periodo;
-			$this->dia = $dia;
-			$this->salon = $salon;
+			$this->cod_grupo = $cod_grupo;
+			$this->cod_plan = $cod_plan;
 		}
 
-		function setPeriodo($periodo)
+		function setCod_grupo($cod_grupo)
 		{
-			$this->periodo=$periodo;
+			$this->cod_grupo=$cod_grupo;
 		}
-		function getPeriodo()
+		function getCod_grupo()
 		{
-			return($this->periodo);
+			return($this->cod_grupo);
 		}
-		function setDia($dia)
+		function setCod_plan($cod_plan)
 		{
-			$this->dia=$dia;
+			$this->cod_plan=$cod_plan;
 		}
-		function getDia()
+		function getCod_plan()
 		{
-			return($this->dia);
-		}
-		function setSalon($salon)
-		{
-			$this->salon=$salon;
-		}
-		function getSalon()
-		{
-			return($this->salon);
+			return($this->cod_plan);
 		}
 	}
 

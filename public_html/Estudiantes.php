@@ -1,108 +1,126 @@
-<!DOCTYPE html>
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require '../resources/config.php';
+require RESOURCES_PATH.'/Estudiante.php';
+require RESOURCES_PATH.'/Programa.php';
+require RESOURCES_PATH.'/security.php';
+
+$estudiantes=array();
+$db=$config["db"]["univManager"];
+            $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
+            $stmt=$con->prepare('SELECT * FROM Estudiante e INNER JOIN Persona p on (p.cedula=e.cedula)');
+            $stmt->execute();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+            if(isset($estudiantes))
+                {
+                    array_push($estudiantes, new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
+
+                    $_SESSION["estudiantes"]=$estudiantes;
+                }
+                else
+                {   
+                    $estudiantes = array( new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
+                    $_SESSION["estudiantes"]=$estudiantes;
+                }
+        }
+                
+      if(isset($_POST["accion"])) 
+      {
+        
+        $accion = $_POST["accion"];
+        $rowToRemove=$_POST["rowToRemove"];
+        switch($accion)
+        {
+            case "removeRow":
+
+                header("Location: modificarPrograma.php");
+            break;
+        }
+      }     
+
+function generarTabla($studentsArr)
+{
+    $tabla='<table class="table table-hover table-striped"><tr><th>Nombre</th><th>Apellido</th><th>Cedula</th><th>Correo</th><th>Telefono</th><th>Direccion</th><th>Sexo</th><th>Accion</th>';
+    $x=0;
+    foreach($studentsArr as &$student)
+    {
+        $tabla.='<tr>
+            <td>
+                '.$student->getNombre().'
+            </td>
+            <td>
+                '.$student->getApellido().'
+                
+            </td>
+            <td>
+                '.$student->getCedula().'
+                
+            </td>
+            <td>
+                '.$student->getCorreo().'
+                
+            </td>
+            <td>
+                '.$student->getTelefono().'
+                
+            </td>
+            <td>
+                
+                '.$student->getDireccion().'
+            </td>
+
+            <td>
+                '.$student->getSexo().'
+            </td>
+            <td>
+                <form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
+                    <input type="hidden" name="rowToRemove" value="'.$x.'">
+                    <input type="hidden" name="action" value="removeRow">
+                    <input type ="submit" value="Remover Estudiante">
+                </form>
+            </td>
+            </tr>';
+        $x=$x+1;
+    }
+    $tabla.='</table>';
+    return($tabla);
+}
+?>
+<!doctype html>
 <html>
+<?php require TEMPLATES_PATH.'/head.php';?>
 <body>
 <div class="wrapper">
-    <?php 
-  require 'Header.php';
+<?php
+    require TEMPLATES_PATH.'/sidebar.php';
 ?>
 <div class="main-panel">
-        <nav class="navbar navbar-default navbar-fixed" >
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                                   
-                    <a class="navbar-brand" >Estudiantes</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    
 
-                    <ul class="nav navbar-nav navbar-right">
-                        
-                        <li>
-                            <a class="log_out" href="#">
-                                <p>Cerrar Sesión</p>
-                            </a>
-                        </li>
-						<li class="separator hidden-lg hidden-md"></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<?php
+    $navbarBrand = "Estudiantes";
+    require TEMPLATES_PATH.'/navbar.php';
+?>
 
 
-        <div class="content">
+<div class="content">
             <div class="container-fluid">
                 <div class="row">
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Agregar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Modificar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Eliminar</a>
-          <a href="#" class="btn btn-info btn-fill pull-left" style="margin-right: 20px">Buscar</a>
+                <a href="Oferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Atras</a>
+          <a href="registroEstudiante.php" class="btn btn-info btn-fill" style="margin-right: 20px">Crear</a>
+         
                 </div>
-                <br> </br>
+                <br> 
             <!-- Lo siguiente solo es una prueba de como deberia quedar despues de agregar -->
             <div class="row">
                     <div class="col-md-12">
-                          
-                            <div class="content table-responsive table-full-width">
-                                <table class="table table-hover table-striped">
-                                    <thead>
-                                        <th>ID</th>
-                                    	<th>Name</th>
-                                    	<th>Salary</th>
-                                    	<th>Country</th>
-                                    	<th>City</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        	<td>1</td>
-                                        	<td>Dakota Rice</td>
-                                        	<td>$36,738</td>
-                                        	<td>Niger</td>
-                                        	<td>Oud-Turnhout</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>2</td>
-                                        	<td>Minerva Hooper</td>
-                                        	<td>$23,789</td>
-                                        	<td>Curaçao</td>
-                                        	<td>Sinaai-Waas</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>3</td>
-                                        	<td>Sage Rodriguez</td>
-                                        	<td>$56,142</td>
-                                        	<td>Netherlands</td>
-                                        	<td>Baileux</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>4</td>
-                                        	<td>Philip Chaney</td>
-                                        	<td>$38,735</td>
-                                        	<td>Korea, South</td>
-                                        	<td>Overland Park</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>5</td>
-                                        	<td>Doris Greene</td>
-                                        	<td>$63,542</td>
-                                        	<td>Malawi</td>
-                                        	<td>Feldkirchen in Kärnten</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>6</td>
-                                        	<td>Mason Porter</td>
-                                        	<td>$78,615</td>
-                                        	<td>Chile</td>
-                                        	<td>Gloucester</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            
+                            
+                                
+                                    <?php echo generarTabla($estudiantes); 
+                                    ?>
+                                
 
                             </div>
                     </div>
@@ -112,11 +130,9 @@
             </div>
         </div>
 
-       <?php 
-  require 'footer.php';
-?>
-
+    
     </div>
-</div>
+    <?php require TEMPLATES_PATH.'/footer.php'; ?>  
 </body>
 </html>
+

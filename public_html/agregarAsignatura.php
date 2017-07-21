@@ -48,10 +48,13 @@ if(isset($_POST["action"]))
 				if($stmt->rowCount())
 				{
 					$message='Exito';
+					$_SESSION["message"]=$message;
+					header('Location: Asignaturas.php');
 				}
 				else
 				{
 					$message ='El registro de la asignatura fallo';
+					$_SESSION["message"]=$message;
 				}
 			}
 			else

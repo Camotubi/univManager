@@ -207,6 +207,7 @@ switch ($accion) {
                             
                                 
                                  <?php 
+                                
                                  echo'Nombre del Programa:'.$selectedPrograma->getNombre();
 echo $body;?>
 

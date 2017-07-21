@@ -25,9 +25,8 @@ if(isset($_POST["cod_plan"]))
 			{
 				$stmt=$con->prepare('INSERT INTO Programa(cod_plan,nombre,fecha_apro,descripccion) VALUES(:cod_plan,:nombre,:fecha_apro,:descrip)');
 				$stmt->execute(['cod_plan'=>$cod_plan,'nombre'=>$nombre, 'fecha_apro' => $fecha_apro,'descrip'=>$descripccion]);
-				$_SESSION["selectedPrograma"] = new Programa($row['cod_plan'],$row['nombre'],$row['fecha_apro'],$row['descripccion']);
-				var_dump($_SESSION);
-				print_r($stmt->errorInfo());
+				$_SESSION["selectedPrograma"] = new Programa($cod_plan,$nombre,$fecha_apro,$descripccion);
+				
 				header('Location: modificarPrograma.php');
 
 			}

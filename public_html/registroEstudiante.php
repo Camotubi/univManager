@@ -3,18 +3,55 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require "../resources/config.php";
 require RESOURCES_PATH.'/security.php';
-require RESOURCES_PATH.'/Persona.php';
-if(isset($_POST["tipoRegistro"])){$tipoRegistro = $_POST["tipoRegistro"];}
-?>
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Registro de Estudiantes</title>
-		<meta charset="UTF-8">
-	</head>
-<body>
-<?php
-	if(!isset($_POST["tipoRegistro"]))
+require RESOURCES_PATH.'/Estudiante.php';
+
+
+
+
+$accion="default";
+if(isset($_POST["accion"]))
+{
+	$accion=$_POST["accion"];
+}
+switch ($accion)
+{
+	case "registrar":
+	$db=$config["db"]["univManager"];
+	 $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
+	$estudiante = new Estudiante($_POST['nombre'],$_POST['apellido'],$_POST['telefono'],$_POST['cedula'],$_POST['direccion'],$_POST['correo'],$_POST['sexo']);
+	$stmt=$con->prepare('INSERT INTO  Persona(cedula,nombre,apellido,correo,direccion,sexo,telefono) VALUES(:cedula,:nombre,:apellido,:correo,:direccion,:sexo,:telefono);INSERT INTO Estudiante(cedula)VALUES(:cedula);');
+	$stmt->execute(['cedula'=>$estudiante->getCedula(),'nombre'=>$estudiante->getNombre(),'apellido'=>$estudiante->getApellido(),'correo'=>$estudiante->getCorreo(),'direccion'=>$estudiante->getDireccion(),'sexo'=>$estudiante->getSexo(),'telefono'=>$estudiante->getTelefono()]);
+	print_r($stmt->errorInfo());
+	break;
+
+	default:
+		$body='<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
+Nombre: <input type="text" name="nombre" required autofocus placeholder="Nombre" title="Nombre"><br><br>
+       Apellido:
+      <input type="text" name="apellido" required autofocus placeholder="Apellido" title="Apellido"><br><br>
+      Cedula:
+<input type="text" name="cedula" required autofocus" title="Introduzca su nombre aqui"><br><br>
+Email:
+<input type="text" name="correo" required autofocus  title="Introduzca su nombre aqui"><br><br>
+Telefono:
+<input type="text" name="telefono" required autofocus  title="Introduzca su nombre aqui"><br><br>
+Direccion:
+<input type="text" name="direccion" required autofocus  title="Introduzca su nombre aqui"><br><br>
+Sexo:
+<select name="sexo">
+<option value="M">Masculino</option>
+<option value="F">Femenino</option>
+</select><br><br>
+<input type ="hidden" name="accion" value="registrar">
+<input type ="submit" class= "btn btn-info btn-fill" value= "Registrar a Estudiante">
+</form>
+'
+
+;
+	break;
+
+}
+	/*if(!isset($_POST["tipoRegistro"]))
 	{
 		echo'<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">';
 			echo '<input type="submit" name="tipoRegistro" value="Registro Unico">';
@@ -165,11 +202,48 @@ echo 'Nombre: <input type="text" name="nombre" required autofocus placeholder="N
 			}
 		}
 	}
+	*/
 ?>
 
+<!doctype html>
+<html>
+<?php require TEMPLATES_PATH.'/head.php';?>
+<body>
+<?php
+	require TEMPLATES_PATH.'/sidebar.php';
+?>
+<div class="main-panel">
+
+<?php
+	$navbarBrand = "Registro de Estudiante";
+	require TEMPLATES_PATH.'/navbar.php';
+?>
+
+
+<div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                <a href="Estudiante.php" class="btn btn-info btn-fill" style="margin-right: 20px">Atras</a>
+          
+         
+                </div>
+                <br> 
+            <!-- Lo siguiente solo es una prueba de como deberia quedar despues de agregar -->
+            <div class="row">
+                    <div class="col-md-12">
+                            
+                                    <?php echo $body; 
+                                    ?>
+                                
+
+                            </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+	<?php require TEMPLATES_PATH.'/footer.php'; ?>	
 </body>
 </html>
-<?php
-
-
-?>
