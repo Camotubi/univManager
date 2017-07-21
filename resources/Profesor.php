@@ -1,6 +1,6 @@
 <?php
 	class Profesor extends Persona {
-		private $salario;
+		public  $salario;
 		public  $id_profesor;
 
 		function __CONSTRUCT($nombre,$apellido,$telefono,$cedula,$direccion,$correo,$sexo,$salario,$id_profesor)

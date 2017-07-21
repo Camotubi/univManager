@@ -21,8 +21,8 @@ switch($accion)
 			$cod_plan = $_POST["cod_plan"];
 			$db=$config["db"]["univManager"];
 			$con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-			$stmt=$con->prepare('SELECT * FROM Grupo;');
-			$stmt->execute();
+			$stmt=$con->prepare('SELECT * FROM Grupo WHERE cod_grupo=:cod_grupo;');
+			$stmt->execute(['cod_grupo'=>$cod_grupo]);
 			if($stmt->rowCount()>0)
 			{
 				$message = "Grupo ya existe";

@@ -43,7 +43,7 @@ require RESOURCES_PATH.'/security.php';
                     </div>
                     </a>
                     
-                    <a href="#"> 
+                    <a href="horarioProfesor.php"> 
                     <div class="col-md-6">
                         <div class="card" style="background-image: url(assets/img/generarHD.jpg); background-position: center; ">
                             
@@ -56,7 +56,7 @@ require RESOURCES_PATH.'/security.php';
                 
                 <div class="row">
                     
-                    <a href="#"> 
+                    <a href="horarioGrupo.php"> 
                     <div class="col-md-6">
                         <div class="card" style="background-image: url(assets/img/generarHM.jpg); background-position: center; ">
                             

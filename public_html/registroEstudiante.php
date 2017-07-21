@@ -21,7 +21,6 @@ switch ($accion)
 	$estudiante = new Estudiante($_POST['nombre'],$_POST['apellido'],$_POST['telefono'],$_POST['cedula'],$_POST['direccion'],$_POST['correo'],$_POST['sexo']);
 	$stmt=$con->prepare('INSERT INTO  Persona(cedula,nombre,apellido,correo,direccion,sexo,telefono) VALUES(:cedula,:nombre,:apellido,:correo,:direccion,:sexo,:telefono);INSERT INTO Estudiante(cedula)VALUES(:cedula);');
 	$stmt->execute(['cedula'=>$estudiante->getCedula(),'nombre'=>$estudiante->getNombre(),'apellido'=>$estudiante->getApellido(),'correo'=>$estudiante->getCorreo(),'direccion'=>$estudiante->getDireccion(),'sexo'=>$estudiante->getSexo(),'telefono'=>$estudiante->getTelefono()]);
-	print_r($stmt->errorInfo());
 	break;
 
 	default:
