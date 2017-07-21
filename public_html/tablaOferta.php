@@ -12,13 +12,7 @@ require RESOURCES_PATH.'/security.php';
 require LIBRARY_PATH.'/dompdf/autoload.inc.php';
 $grupoSeleccionado=$_SESSION["grupoSeleccionado"];
 $profesoresDisponibles=$_SESSION["profesoresDisponibles"];
-		$profesorSeleccionado =$_SESSION["profesorSeleccionado"];
-		$cantDiasClase=$_SESSION["cantDiasClase"];
-		$salones=$_SESSION["salones"];
-		$diasClase=$_SESSION["diasClase"];
-		$horasClase=$_SESSION["horasClase"];
-		$asignaturaSeleccionada=$_SESSION["asignaturaSeleccionada"];
-		$grupoSeleccionado=$_SESSION["grupoSeleccionado"];
+
 $estudiantesEnElGrupo=array();
 $accion="normal";
 	$db=$config["db"]["univManager"];
@@ -263,7 +257,7 @@ $tabla .='
             <div class="container-fluid">
                 <div class="row">
                 <a href="Oferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Menu Principal</a>
-       
+       			<a href="crearOferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Crear Oferta</a>
          
                 </div>
                 <br> 

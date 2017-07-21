@@ -20,13 +20,13 @@ if(isset($_POST["accion"]))
           case "mostrarHorario":
           $db=$config["db"]["univManager"];
           $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-          $stmt=$con->prepare('SELECT gpa.dia,gpa.periodo,gpa.salon,a.nombre  FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo WHERE g.cod_grupo = :cod_grupo ORDER BY periodo');
+          $stmt=$con->prepare('SELECT gpa.dia,gpa.periodo,gpa.salon,a.nombre ,gpa.codhorario FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo WHERE g.cod_grupo = :cod_grupo ORDER BY periodo');
          
             $stmt->execute(['cod_grupo'=>$_POST["cod_grupo"]]);
           $clase =array();
           while($row = $stmt->fetch(PDO::FETCH_ASSOC))
           {
-            array_push($clase,array("nombre"=>$row["nombre"],"salon"=>$row["salon"],"periodo"=>$row["periodo"],"dia"=>$row["dia"]));
+            array_push($clase,array("nombre"=>$row["nombre"],"salon"=>$row["salon"],"periodo"=>$row["periodo"],"dia"=>$row["dia"],"codhorario"=>$row["codhorario"]));
             $cod_grupo= $_POST["cod_grupo"];
           }
           $body=tablaHorario($clase,$cod_grupo);
@@ -98,40 +98,40 @@ function tablaHorario($clases, $cod_grupo)
               </th>
             </thead>
             <tr><td padding="2">';
-            for($i =0 ; $i<count($lunes);$i=$i+1)
+             for($i =0 ; $i<count($lunes);$i=$i+1)
             {
               $tmp=$lunes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($martes);$i=$i+1)
             {
               $tmp=$martes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($miercoles);$i=$i+1)
             {
               $tmp=$miercoles[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($jueves);$i=$i+1)
             {
               $tmp=$jueves[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($viernes);$i=$i+1)
             {
               $tmp=$viernes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($sabado);$i=$i+1)
             {
               $tmp=$sabado[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td></tr></table>
             <br>Codigo Grupo: '. $cod_grupo;

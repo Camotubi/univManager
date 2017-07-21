@@ -20,13 +20,13 @@ if(isset($_POST["accion"]))
           case "mostrarHorario":
           $db=$config["db"]["univManager"];
           $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-          $stmt=$con->prepare('SELECT gpa.dia,gpa.periodo,gpa.salon,a.nombre,per.nombre as nomprof, per.apellido  FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo INNER JOIN Profesor as pro on pro.id_profesor = gpa.id_profesor INNER JOIN Persona as per on per.cedula = pro.cedula WHERE pro.cedula = :cedula ORDER BY periodo');
+          $stmt=$con->prepare('SELECT gpa.dia,gpa.periodo,gpa.salon,a.nombre,per.nombre as nomprof ,gpa.codhorario, per.apellido  FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo INNER JOIN Profesor as pro on pro.id_profesor = gpa.id_profesor INNER JOIN Persona as per on per.cedula = pro.cedula WHERE pro.cedula = :cedula ORDER BY periodo');
          
             $stmt->execute(['cedula'=>$_POST["cedula"]]);
           $clase =array();
           while($row = $stmt->fetch(PDO::FETCH_ASSOC))
           {
-            array_push($clase,array("nombre"=>$row["nombre"],"salon"=>$row["salon"],"periodo"=>$row["periodo"],"dia"=>$row["dia"]));
+            array_push($clase,array("nombre"=>$row["nombre"],"salon"=>$row["salon"],"periodo"=>$row["periodo"],"dia"=>$row["dia"],"codhorario"=>$row["codhorario"]));
             $nombrePersona= $row["nomprof"].' '.$row["apellido"];
           }
           $body=tablaHorario($clase,$nombrePersona);
@@ -101,37 +101,37 @@ function tablaHorario($clases, $nombrePer)
             for($i =0 ; $i<count($lunes);$i=$i+1)
             {
               $tmp=$lunes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($martes);$i=$i+1)
             {
               $tmp=$martes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($miercoles);$i=$i+1)
             {
               $tmp=$miercoles[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($jueves);$i=$i+1)
             {
               $tmp=$jueves[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($viernes);$i=$i+1)
             {
               $tmp=$viernes[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td><td padding="2">';
              for($i =0 ; $i<count($sabado);$i=$i+1)
             {
               $tmp=$sabado[$i];
-              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br><br>';
+              $form.=$tmp["periodo"].':<br>'.$tmp["nombre"].'<br>Salon: '.$tmp["salon"].'<br>Codigo Horario:'.$tmp["codhorario"].'<br>';
             }
             $form.='</td></tr></table>
             <br>Nombre del Profesor: '. $nombrePer;

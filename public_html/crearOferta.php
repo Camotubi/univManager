@@ -103,10 +103,12 @@ if(isset($_POST["accion"]))
 					array_push($profesoresDisponibles,new Profesor($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo'],$row['salario'],$row['id_profesor']));
 			}
 			$_SESSION["profesoresDisponibles"]=$profesoresDisponibles;
+
 		$body='<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
 			<input type="hidden" name="accion" value="crearOferta">
-			'
+			Profesor:'
 			.generarComboboxProfesores($profesoresDisponibles).
+			'Codigo Hora:<input type="text" name="codigo_hora">'.
 			'<input type ="submit" value="Generar Oferta">
 			</form>'
 			;
@@ -121,11 +123,12 @@ if(isset($_POST["accion"]))
 		$horasClase=$_SESSION["horasClase"];
 		$asignaturaSeleccionada=$_SESSION["asignaturaSeleccionada"];
 		$grupoSeleccionado=$_SESSION["grupoSeleccionado"];
+		$codigoHora =$_POST["codigo_hora"];
 		$con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-		$stmt =$con->prepare('INSERT INTO GrupoProfesorAsignatura(cod_grupo,cod_asig,id_profesor,dia,salon,periodo) VALUES(:cod_grupo,:cod_asig,:id_profesor,:dia,:salon,:periodo)');
+		$stmt =$con->prepare('INSERT INTO GrupoProfesorAsignatura(cod_grupo,cod_asig,id_profesor,dia,salon,periodo,codhorario) VALUES(:cod_grupo,:cod_asig,:id_profesor,:dia,:salon,:periodo,:codigoHora)');
 		for($i=0; $i<$cantDiasClase; $i++)
 		{
-				$stmt->execute(['cod_grupo'=>$grupoSeleccionado->getCod_grupo(),'cod_asig'=>$asignaturaSeleccionada->getCod_asig(),'id_profesor'=>$profesorSeleccionado->id_profesor,'dia'=>$diasClase[$i],'salon'=>$salones[$i],'periodo'=>$horasClase[$i]]);
+				$stmt->execute(['cod_grupo'=>$grupoSeleccionado->getCod_grupo(),'cod_asig'=>$asignaturaSeleccionada->getCod_asig(),'id_profesor'=>$profesorSeleccionado->id_profesor,'dia'=>$diasClase[$i],'salon'=>$salones[$i],'periodo'=>$horasClase[$i],"codigoHora"=>$codigoHora]);
 				;
 		}
 
@@ -195,7 +198,7 @@ function generarCamposDeAsignatura($x)
 		<select name="dia'.$i.'">
 			<option value="Lunes">Lunes</option>
 			<option value="Martes">Martes</option>
-			<option value="Miercoes">Miercoles</option>
+			<option value="Miercoles">Miercoles</option>
 			<option value="Jueves">Jueves</option>
 			<option value="Viernes">Viernes</option>
 			<option value="Sabado">Sabado</option>
