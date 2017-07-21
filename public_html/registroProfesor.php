@@ -68,7 +68,7 @@ Sexo:
 <div class="main-panel">
 
 <?php
-	$navbarBrand = "Registro de Estudiante";
+	$navbarBrand = "Registro de Profesor";
 	require TEMPLATES_PATH.'/navbar.php';
 ?>
 
