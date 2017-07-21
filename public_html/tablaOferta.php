@@ -18,13 +18,13 @@ $accion="normal";
 	$db=$config["db"]["univManager"];
 	$con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
 
-            $stmt=$con->prepare('SELECT DISTINCT a.cod_asig,g.cod_grupo,a.nombre,a.duracion_bruta,pro.id_profesor,CONCAT(per.nombre,\' \',per.apellido ) AS nomprof FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo INNER JOIN Profesor as pro on pro.id_profesor = gpa.id_profesor INNER JOIN  Persona as per on per.cedula = pro.cedula');
+            $stmt=$con->prepare('SELECT DISTINCT a.cod_asig,g.cod_grupo,a.nombre,a.duracion_bruta,pro.id_profesor,gpa.codhorario,CONCAT(per.nombre,\' \',per.apellido ) AS nomprof FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo INNER JOIN Profesor as pro on pro.id_profesor = gpa.id_profesor INNER JOIN  Persona as per on per.cedula = pro.cedula');
 
             $stmt->execute();
            $ofertas = array();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-           array_push($ofertas,array("cod_asig"=>$row["cod_asig"],"cod_grupo"=>$row["cod_grupo"],"duracion_bruta"=>$row["duracion_bruta"],"nomprof" =>$row["nomprof"],"id_profesor"=>$row["id_profesor"],"nomAsig"=>$row["nombre"]));
+           array_push($ofertas,array("cod_asig"=>$row["cod_asig"],"cod_grupo"=>$row["cod_grupo"],"duracion_bruta"=>$row["duracion_bruta"],"nomprof" =>$row["nomprof"],"id_profesor"=>$row["id_profesor"],"nomAsig"=>$row["nombre"],"codhorario"=>$row["codhorario"]));
         }
 if(isset($_POST["accion"]))
 {
@@ -41,6 +41,7 @@ switch($accion)
 		$nomprof=$ofertas[$ofertaI]["nomprof"];
 		$id_profesor = $ofertas[$ofertaI]["id_profesor"];
 		$duracion_bruta = $ofertas[$ofertaI]["duracion_bruta"];
+		$codhorario = $ofertas[$ofertaI]["codhorario"];
 		$pago=0;
 	$form='<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
 			<input type="hidden" name="accion" value="genTabla">';
@@ -80,6 +81,7 @@ switch($accion)
 		$id_profesor = $ofertas[$ofertaI]["id_profesor"];
 		$duracion_bruta = $ofertas[$ofertaI]["duracion_bruta"];
 		$fpago1 =$_POST["fechaPago1"];
+		$codhorario = $ofertas[$ofertaI]["codhorario"];
 		if(isset($_POST["fechaPago2"]))
 		{
 
@@ -103,7 +105,7 @@ switch($accion)
         {
                     array_push($estudiantesEnElGrupo, new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
         }
-        $body=tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fpago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantesEnElGrupo);
+        $body=tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fpago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantesEnElGrupo,$codhorario);
 	break;
 
 
@@ -151,7 +153,7 @@ function tablaOfertas($ofertas)
 }
 
 
-function tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fechaPago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantes)
+function tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fechaPago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantes,$codhorario)
 {
 
 		$tabla ='
@@ -167,6 +169,9 @@ function tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fechaPago1,$
 			</tr>
 			<tr>
 			<td>ASIGNATURA</td><td>'.$nom_asig.'</td>
+			<tr>
+			<tr>
+			<td>Codigo Hora</td><td>'.$codhorario.'</td>
 			<tr>
 			<td>Fecha Pago</td><td>'.$fechaPago1.'</td>
 			</tr>
@@ -198,7 +203,8 @@ $tabla .='
 		<h4 style=" text-align: center;">Facultad de Ingenieria de Sistemas Computacionales</h4>
 		<h5 style=" text-align: center;">Estudiantes de '.$nom_asig.'</h5>
 		<h5 style=" text-align: center;">Grupo'.$cod_grupo.'</h5>
-		<table border ="1" style=";
+		<h5 style=" text-align: center;">Codigo Horario'.$codhorario.'</h5>
+		<table border ="1" style="
     margin-left: auto;
     margin-right: auto;">
 			<tr>
