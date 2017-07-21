@@ -170,7 +170,7 @@ function formInicial()
             <div class="container-fluid">
                 <div class="row">
                 <a href="Oferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Atras</a>
-          <a href="crearGrupo.php" class="btn btn-info btn-fill" style="margin-right: 20px">Crear</a>
+          
          
                 </div>
                 <br> 

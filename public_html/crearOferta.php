@@ -128,7 +128,7 @@ if(isset($_POST["accion"]))
 				$stmt->execute(['cod_grupo'=>$grupoSeleccionado->getCod_grupo(),'cod_asig'=>$asignaturaSeleccionada->getCod_asig(),'id_profesor'=>$profesorSeleccionado->id_profesor,'dia'=>$diasClase[$i],'salon'=>$salones[$i],'periodo'=>$horasClase[$i]]);
 				;
 		}
-		
+
 		break;
 
 		default:
@@ -206,8 +206,50 @@ function generarCamposDeAsignatura($x)
 	}
 	return($campos);
 }
+?>
+<!doctype html>
+<html>
+<?php require TEMPLATES_PATH.'/head.php';?>
+<body>
+<?php
+	require TEMPLATES_PATH.'/sidebar.php';
+?>
+<div class="main-panel">
 
-
+<?php
+	$navbarBrand = "Crear Oferta";
+	require TEMPLATES_PATH.'/navbar.php';
 ?>
 
-<?php echo $body;?>
+
+<div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                <a href="Oferta.php" class="btn btn-info btn-fill" style="margin-right: 20px">Atras</a>
+ 
+         
+                </div>
+                <br> 
+            <!-- Lo siguiente solo es una prueba de como deberia quedar despues de agregar -->
+            <div class="row">
+                    <div class="col-md-12">
+                            
+                            
+                                
+                                    <?php echo $body;?>
+                                
+
+                            </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+	<?php require TEMPLATES_PATH.'/footer.php'; ?>	
+</body>
+</html>
+
+
+

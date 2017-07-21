@@ -10,7 +10,6 @@ require RESOURCES_PATH.'/Profesor.php';
 
 require RESOURCES_PATH.'/security.php';
 require LIBRARY_PATH.'/dompdf/autoload.inc.php';
-use Dompdf\Dompdf;
 $grupoSeleccionado=$_SESSION["grupoSeleccionado"];
 $profesoresDisponibles=$_SESSION["profesoresDisponibles"];
 		$profesorSeleccionado =$_SESSION["profesorSeleccionado"];
@@ -22,91 +21,39 @@ $profesoresDisponibles=$_SESSION["profesoresDisponibles"];
 		$grupoSeleccionado=$_SESSION["grupoSeleccionado"];
 $estudiantesEnElGrupo=array();
 $accion="normal";
+	$db=$config["db"]["univManager"];
+	$con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
+
+            $stmt=$con->prepare('SELECT DISTINCT a.cod_asig,g.cod_grupo,a.nombre,a.duracion_bruta,pro.id_profesor,CONCAT(per.nombre,\' \',per.apellido ) AS nomprof FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo INNER JOIN Profesor as pro on pro.id_profesor = gpa.id_profesor INNER JOIN  Persona as per on per.cedula = pro.cedula');
+
+            $stmt->execute();
+           $ofertas = array();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+           array_push($ofertas,array("cod_asig"=>$row["cod_asig"],"cod_grupo"=>$row["cod_grupo"],"duracion_bruta"=>$row["duracion_bruta"],"nomprof" =>$row["nomprof"],"id_profesor"=>$row["id_profesor"],"nomAsig"=>$row["nombre"]));
+        }
 if(isset($_POST["accion"]))
 {
 	$accion=$_POST["accion"];
 }
+
 switch($accion)
 {
-	case "genTabla":
-	$db=$config["db"]["univManager"];
-            $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-            $stmt=$con->prepare('SELECT nombre, apellido, e.cedula AS cedula, correo,telefono,direccion,sexo FROM Persona AS p INNER JOIN Estudiante AS e on (e.cedula = p.cedula) INNER JOIN Grupo AS g on (g.cod_grupo = e.cod_grupo) WHERE (g.cod_grupo= :cod_grupo)');
-            $stmt->execute(['cod_grupo'=>$grupoSeleccionado->getCod_grupo()]);
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-        {
-            if(isset($estudiantesEnElGrupo))
-                {
-                    array_push($estudiantesEnElGrupo, new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
-
-                    $_SESSION["estudiantesEnElGrupo"]=$estudiantesEnElGrupo;
-                }
-                else
-                {   
-                    $estudiantesEnElGrupo = array( new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
-                    $_SESSION["estudiantesEnElGrupo"]=$estudiantesEnElGrupo;
-                }
-        }
-     
-        $body=tablaOferta($estudiantesEnElGrupo);
-	break;
-	default:
-	$db=$config["db"]["univManager"];
-	$con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
-	$stmt=$con->prepare('SELECT DISTINCT g.cod_grupo FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo ');
-            $stmt->execute();
-            $grupos = array();
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-        {  
-            array_push($grupos,$row["cod_grupo"]);
-        }
-            $stmt=$con->prepare('SELECT DISTINCT a.cod_asig,g.cod_grupo,a.nombre,a.duracion_bruta FROM Asignatura AS a INNER JOIN GrupoProfesorAsignatura as gpa on gpa.cod_asig=a.cod_asig INNER JOIN Grupo as g on g.cod_grupo=gpa.cod_grupo ');
-            $stmt->execute();
-            $cod_asignaturas= array();
-            $nombreAsignaturas= array();
-            
-            $duraccion_brutas=array();
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-        {  
-            array_push($cod_asignaturas,$row["cod_asig"]);
-            array_push($nombreAsignaturas,$row["nombre"]);
-        }
-        var_dump($grupos);
-
-		$body=forminicial($cod_asignaturas,$nombreAsignaturas,$grupos,$duraccion_brutas);
-	break;
-}
-
-function forminicial($cod_asignaturas,$nombreAsignaturas,$grupos)
-{
-		$form='<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
-		<input type="hidden" name="accion" value="mostrarFormInfoAdicional">
-		Grupo: <select name="cod_grupo">';
-		foreach($grupos as &$cod_grupo)
-		{
-			$form.='<option value="'.$cod_grupo.'">'.$cod_grupo.'</option>';
-		}
-		$form.='</select>
-		Asignatura: <select name="cod_asig>';
-		$x=0;
-		foreach($cod_asignaturas as &$cod_asig)
-		{
-			$form.='<option value="'.$cod_asig.'>'.$cod_asig.' '.$nombreAsignaturas[$x].'</option>';
-			$x=$x+1;		
-		}
-		$form.='<input type="submit" value="Seleccionar>"';
-		return($form);
-}
-
-function formInfoAdicional($Asignatura,$gruposDisponibles,$AsignaturasDisponibles)
-{
-	$pagos=0;
+	case "calendario":
+		$ofertaI=$_POST["ofertaToCalendario"];
+		$nom_asig = $ofertas[$ofertaI]["nomAsig"];
+		$cod_asig = $ofertas[$ofertaI]["cod_asig"];
+		$cod_grupo = $ofertas[$ofertaI]["cod_grupo"];
+		$nomprof=$ofertas[$ofertaI]["nomprof"];
+		$id_profesor = $ofertas[$ofertaI]["id_profesor"];
+		$duracion_bruta = $ofertas[$ofertaI]["duracion_bruta"];
+		$pago=0;
 	$form='<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
-		<input type="hidden" name="accion" value="genTabla">';
-	if ($Asignatura->getDuracion_bruta()<=20) {
-		$pagos=1;
+			<input type="hidden" name="accion" value="genTabla">';
+	if ($duracion_bruta<=20) {
+		$pago=1;
 	}
-	elseif ($Asignatura->getDuracion_bruta()>20 && $Asignatura->getDuracion_bruta()<=48)
+	elseif ($duracion_bruta>20 && $$duracion_bruta=48)
 	{
 		$pago=2;
 	}
@@ -123,39 +70,143 @@ function formInfoAdicional($Asignatura,$gruposDisponibles,$AsignaturasDisponible
 			Fecha de Retiro/ Inclusion: <input type="text" name="RetiroInclucion"><br><br>
 			Fecha de Retiro Fuera del Periodo: <input type="text" name="RetiroFueradelPeriodo"><br><br>
 			Fecha de Retiro Total: <input type="text" name="retiroTotal"><br><br>
+			<input type="hidden" name ="ofertaI" value ="'.$ofertaI.'">
 			<input type="submit" value="Confirmar">
 	</form>';
-	return($form);
-}
-function formSelectAsigGrupo()
-{
-	return('<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
-		<input type="hidden" name="accion" value="mostrarInfoAdiciona">
+
+	$body=$form;
+	break;
+
+	case "genTabla":
+		$ofertaI=$_POST["ofertaI"];
+		$nom_asig = $ofertas[$ofertaI]["nomAsig"];
+		$cod_asig = $ofertas[$ofertaI]["cod_asig"];
+		$cod_grupo = $ofertas[$ofertaI]["cod_grupo"];
+		$nomprof=$ofertas[$ofertaI]["nomprof"];
+		$id_profesor = $ofertas[$ofertaI]["id_profesor"];
+		$duracion_bruta = $ofertas[$ofertaI]["duracion_bruta"];
+		$fpago1 =$_POST["fechaPago1"];
+		if(isset($_POST["fechaPago2"]))
+		{
+
+		}
+		if(isset($_POST["fechaPago3"]))
+		{
+			
+		}
+		$fmatri = $_POST["matricula"];
+		$fclase =$_POST["Clases"];
+		$fRetIncl = $_POST["RetiroInclucion"];
+		$fRetFuePer = $_POST["RetiroFueradelPeriodo"];
+		$fRetTot = $_POST["retiroTotal"];
+
+	$estudiantesEnElGrupo=array();
+			$db=$config["db"]["univManager"];
+            $con = new PDO('mysql:host='.$db['host'].';'.'dbname='.$db['dbname'],$db['username'],$db['password']);
+            $stmt=$con->prepare('SELECT nombre, apellido, e.cedula AS cedula, correo,telefono,direccion,sexo FROM Persona AS p INNER JOIN Estudiante AS e on (e.cedula = p.cedula) INNER JOIN Grupo AS g on (g.cod_grupo = e.cod_grupo) WHERE (g.cod_grupo= :cod_grupo)');
+            $stmt->execute(['cod_grupo'=>$grupoSeleccionado->getCod_grupo()]);
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+                    array_push($estudiantesEnElGrupo, new Estudiante($row['nombre'],$row['apellido'],$row['telefono'],$row['cedula'],$row['direccion'],$row['correo'],$row['sexo']));
+        }
+        $body=tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fpago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantesEnElGrupo);
+	break;
 
 
-');
-}
-function tablaOferta($estudiantes)
+
+	break;
+	default:
+
+        $body=tablaOfertas($ofertas);
+          break;      
+    
+ }     
+
+function tablaOfertas($ofertas) 
 {
-		$matricula = $_POST["matricula"];
-		$clases = $_POST["Clases"];
-		$retiroInclucion=$_POST["RetiroInclucion"];
-		$retiroFueradelPeriodo=$_POST["RetiroFueradelPeriodo"];
-		$retiroTotal = $_POST["retiroTotal"];
-		$pagmatricu='http://matricula.utp.ac.pa';
-		$profesoresDisponibles=$_SESSION["profesoresDisponibles"];
-		$profesorSeleccionado =$_SESSION["profesorSeleccionado"];
-		$cantDiasClase=$_SESSION["cantDiasClase"];
-		$salones=$_SESSION["salones"];
-		$diasClase=$_SESSION["diasClase"];
-		$horasClase=$_SESSION["horasClase"];
-		$asignaturaSeleccionada=$_SESSION["asignaturaSeleccionada"];
-		$grupoSeleccionado=$_SESSION["grupoSeleccionado"];
-		$tabla ='<html><body><h1> Universidad Tecnologica de Panamá</h1>
-		<h2>Facultad de Ingenieria de Sistemas Computacionales</h2>
-		<h3>Estudiantes de '.$asignaturaSeleccionada->getNombre().'</h3>
-		<h4>Grupo'.$grupoSeleccionado->getCod_grupo().'</h4>
-		<table>
+    $tabla='<table class="table table-hover table-striped"><thead><th>Codigo-Asignatura</th><th>Codigo-Grupo<th>Nombre Profesor</th></th><th>Accion</th></thead><tbody>';
+    $x=0;
+    foreach($ofertas as &$oferta)
+    {
+        $tabla.='<tr>
+            <td>
+                '.$oferta["cod_asig"].'
+            </td>
+            <td>
+                '.$oferta["cod_grupo"].'
+                
+            </td>
+           
+            <td>
+                '.$oferta["nomprof"].'
+                
+            </td>
+            
+            <td>
+                <form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">
+                    <input type="hidden" name="ofertaToCalendario" value="'.$x.'">
+                    <input type="hidden" name="accion" value="calendario">
+                    <input class="btn btn-info btn-fill" type ="submit" value="Calendario de Oferta">
+                </form>
+            </td>
+            </tr>';
+        $x=$x+1;
+    }
+    $tabla.='</tbody><table>';
+    return($tabla);
+}
+
+
+function tablaOferta($nom_asig,$cod_grupo,$nomprof,$duracion_bruta,$fechaPago1,$fmatri,$fclase,$fRetIncl,$fRetFuePer,$fRetTot,$estudiantes)
+{
+
+		$tabla ='
+<div><h3 style=" text-align: center;"> Universidad Tecnologica de Panamá</h3>
+		<h4 style=" text-align: center;">Facultad de Ingenieria de Sistemas Computacionales</h4>
+		<h5 style=" text-align: center;">Estudiantes de '.$nom_asig.'</h5>
+		<h5 style=" text-align: center;">Grupo'.$cod_grupo.'</h5>
+		<table border ="1" style=";
+    margin-left: auto;
+    margin-right: auto;">
+			<tr>
+				<th>Actividades</th><th>Fecha</th>
+			</tr>
+			<tr>
+			<td>ASIGNATURA</td><td>'.$nom_asig.'</td>
+			<tr>
+			<td>Fecha Pago</td><td>'.$fechaPago1.'</td>
+			</tr>
+			<tr>
+			<td>Matricula</td><td>'.$fclase.'</td>
+			</tr>
+			<tr>
+			<td>Duracion Bruta<td>'.$duracion_bruta.'</td>
+			</tr>
+			<tr>
+			<td>Retiro / Inclusion<td>'.$fRetIncl.'</td>
+			</tr>
+			<tr>
+			<td>Retiro Fuera del Periodo<td>'.$fRetFuePer.'</td>
+			</tr>
+			<tr>
+			<td>Retiro Total<td>'.$fRetTot.'</td>
+			</tr>				
+			<tr>
+			<td>Sitio de Matricula<td> http://matricula.utp.ac.pa</td>
+			</tr>
+			
+			</tr>';
+		
+		$tabla.='</table>
+		<p style=" text-align: center;">Profesor:'.$nomprof.'<p><br> <br></div>';
+$tabla .='
+		<div><h3 style=" text-align: center;"> Universidad Tecnologica de Panamá</h3>
+		<h4 style=" text-align: center;">Facultad de Ingenieria de Sistemas Computacionales</h4>
+		<h5 style=" text-align: center;">Estudiantes de '.$nom_asig.'</h5>
+		<h5 style=" text-align: center;">Grupo'.$cod_grupo.'</h5>
+		<table border ="1" style=";
+    margin-left: auto;
+    margin-right: auto;">
 			<tr>
 				<th>Nombre</th><th>Cedula</th><th>Correo</th><th>Telefono</th>
 			</tr>';
@@ -178,11 +229,11 @@ function tablaOferta($estudiantes)
 			<td>
 				'.$student->getTelefono().'	
 			</td>
-			<td>
+			
 			</tr>';
 		}
-		$tabla.='<table>
-		Profesor:'.$profesorSeleccionado->getNombre().' '. $profesorSeleccionado->getApellido().'<br> <br></body></html>';
+		$tabla.='</table>
+		<p style=" text-align: center;">Profesor:'.$nomprof.'<p><br> <br></div>';
 		return($tabla);
 
 
